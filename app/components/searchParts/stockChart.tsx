@@ -38,7 +38,7 @@ export default function StockChart({ symbol }: { symbol: string }) {
 			});
 		}
 		else { console.log( 'no symbol' ); }
-	}, []);
+	}, [symbol]);
 
 	return (
 		<div className=" text-black">

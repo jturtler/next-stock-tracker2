@@ -5,6 +5,7 @@ import AppWrapper from "./components/AppWrapper";
 
 
 export default function Home() {
+  console.log("page.tsx");
   return (
   <div className="flex h-screen flex-col">
     <Header></Header>
