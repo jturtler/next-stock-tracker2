@@ -5,44 +5,53 @@ import SpinningIcon from "../common/SpinningIcon";
 
 export default function StockChart({ symbol }: { symbol: string }) {
 
-	/*
-	const [searchKey, setSearchcKey] = useState('');
-	const [tickerData, setTickerData] = useState([]);
-	const inputRef = useRef<HTMLInputElement>(null);
-	*/
 	const [loading, setLoading] = useState<boolean>(true); // Loading state
-
-	console.log( 'symbol 1: ' + symbol );
+	const [chartData, setChartData] = useState<any>({}); // Loading state
 
 	useEffect( () => {
 
-		console.log( 'symbol 2: ' + symbol );
+		// console.log( 'StockChart useEffect: ' + symbol );
 
 		if ( symbol )
 		{
-			console.log( 'Retrieving for ChartData..' );
+			// console.log( 'Retrieving for ChartData..' );
 
 			fetch('/api/chartData?symbol=' + symbol + '&startDate=2024-09-01&endDate=2024-09-05&interval=1m' )
-			.then( (response) => {
-				if (!response.ok) {
-					throw new Error('Network response was not ok');
-				 }
+			.then( (response) => 
+			{
+				if (!response.ok) throw new Error('Network response was not ok');
 				return response.json();
-			}).then( (responseJson: any) => {
-				console.log( responseJson );  // put it on 'state'?
+			}).then( (responseJson: any) => 
+			{
 				setLoading(false);
-			})     
+				// console.log( responseJson );
+				if (responseJson) setChartData( responseJson );
+			})
 			.catch((error) => {
-				console.error('Error fetching data:', error);
 				setLoading(false);
+				console.error('Error fetching data:', error);
 			});
 		}
 		else { console.log( 'no symbol' ); }
-	}, []);
+	}, [symbol]); // Only if 'symbol' is not same as previous one, run 'useEffect'
 
 	return (
 		<div className=" text-black">
-			{ loading && <div> Loading.. </div> }
+			{ ( loading ) ?
+				<div className="ml-2 mt-1">
+					<SpinningIcon className="text-gray-400" />
+				</div>
+				:
+				<div>
+					{ chartData?.quotes && 
+						<div>
+							{ <div className="text-sm font-semibold text-gray-800">Prices:</div> } 
+							{ chartData.quotes.map( ( item: any, i: number ) => i <= 10 && <div key={i} className="text-xs">{ JSON.stringify(item) }</div> ) } 
+							{ chartData.quotes.length > 10 && <div className="text-sm italic text-gray-400">{ '...more prices, total: ' + chartData.quotes.length }</div> }
+						</div>
+					}
+				</div>
+			}
 		</div>
 	);
 };

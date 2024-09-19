@@ -16,13 +16,11 @@ export default function Main () {
 
 	return (
 		<div className="text-black p-2">
-			Testing Main Page 
+			Stock Data Search Page: 
 			<div className=""><SearchStock handleOnItemSelect={onStockItemSelect}></SearchStock>
 			</div>
 			{ stockItem && <div className="mt-2">
 					<div className="text-sm font-semibold">{ 'symbol: ' + stockItem.symbol + ', longName: ' + stockItem.longname }</div>
-					<div className="text-gray-500 text-sm mt-2"> { JSON.stringify( stockItem ) } </div>
-
 					<div className="mt-2">
 						<StockChart symbol={stockItem.symbol}></StockChart>
 					</div>
